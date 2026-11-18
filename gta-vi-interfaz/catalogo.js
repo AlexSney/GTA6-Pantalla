@@ -69,5 +69,5 @@ const galeria = [
   { titulo: 'Un salto galáctico', imagen: 'assets/astro-bot.webp', alt: 'Astro Bot salta en un cielo azul brillante.' }
 ];
 
-// Duración que aparece en la fotografía. El usuario puede elegir otra fecha desde el menú.
-const segundosDeMuestra = ((5 * 24 + 10) * 60 + 11) * 60 + 36;
+// 19 de noviembre de 2026 a las 00:00 locales. La hora se puede ajustar desde el menú.
+const fechaLanzamiento = new Date(2026, 10, 19, 0, 0, 0).getTime();

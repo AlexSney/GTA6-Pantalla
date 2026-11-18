@@ -23,7 +23,7 @@ También puedes abrir `index.html` con doble clic desde el explorador de archivo
 | **Esc** | Cerrar el panel abierto |
 | **⋯** | Ver las opciones del título |
 
-Pulsa el contador de GTA VI para cambiar la fecha y hora. La primera vez empieza en **5 días, 10 horas, 11 minutos y 36 segundos**, como en la fotografía. **Usar el tiempo de la foto** reinicia la demostración. El navegador guarda la fecha elegida, el avatar y el formato del reloj cuando permite el almacenamiento local.
+El contador de GTA VI termina el **19 de noviembre de 2026 a las 00:00 de la hora local del navegador**. Pulsa el contador para ajustar la fecha y hora. **Usar fecha de lanzamiento** restaura esa fecha fija. La fecha de muestra guardada por versiones anteriores se sustituye al actualizar; las nuevas fechas personalizadas se conservan cuando el navegador permite el almacenamiento local, al igual que el avatar y el formato del reloj.
 
 **Games** muestra el carrusel de inicio. **Media** reúne la galería de imágenes y el acceso a Netflix. Los perfiles de amigos son de muestra. El enlace a Netflix abre el servicio en otra pestaña y requiere conexión.
 
@@ -31,7 +31,7 @@ Pulsa el contador de GTA VI para cambiar la fecha y hora. La primera vez empieza
 
 | Archivo | Qué puedes cambiar |
 | --- | --- |
-| `catalogo.js` | Juegos, descripciones, imágenes, orden del carrusel y duración inicial del contador |
+| `catalogo.js` | Juegos, descripciones, imágenes, orden del carrusel y fecha de lanzamiento del contador |
 | `estilos.css` | Tamaños, colores, sombras y distribución en ordenador o móvil |
 | `interfaz.js` | Navegación, búsqueda, perfiles y cuenta regresiva |
 | `index.html` | Estructura del menú e iconos de los controles |

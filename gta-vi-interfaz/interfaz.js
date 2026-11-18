@@ -26,14 +26,15 @@ let doceHoras = leer('hora') === '12';
 let avatarActual = leer('avatar');
 if (!Object.hasOwn(avatares, avatarActual)) avatarActual = 'lucia';
 let reducido = leer('movimiento') === 'reducido';
-let fechaObjetivo = Number(leer('objetivo'));
+// No recuperar la fecha relativa de muestra que se guardaba en «objetivo».
+let fechaObjetivo = Number(leer('objetivo-gta-vi'));
 if (!Number.isFinite(fechaObjetivo) || fechaObjetivo <= 0 || fechaObjetivo > 8640000000000000) {
-  fijarObjetivo(Date.now() + segundosDeMuestra * 1000);
+  fijarObjetivo(fechaLanzamiento);
 }
 
 function fijarObjetivo(fecha) {
   fechaObjetivo = fecha;
-  guardar('objetivo', fecha);
+  guardar('objetivo-gta-vi', fecha);
 }
 
 function nodo(etiqueta, clase, texto) {
@@ -241,7 +242,7 @@ function abrirContador() {
   abrirPanel('contador', 'Cuenta regresiva');
   const total = nodo('p', 'count-display', tiempoRestante(Date.now()));
   total.id = 'panel-countdown';
-  panelBody.append(total, nodo('p', '', 'Este contador de muestra empieza con el tiempo de la foto. Puedes elegir cuándo termina.'));
+  panelBody.append(total, nodo('p', '', 'Cuenta hasta el 19 de noviembre de 2026 a las 00:00 de tu hora local. Puedes ajustar la fecha y la hora.'));
   const form = nodo('form');
   const label = nodo('label', 'field-label', 'Fecha y hora local');
   label.htmlFor = 'fecha-objetivo';
@@ -257,8 +258,8 @@ function abrirContador() {
   const acciones = nodo('div', 'form-actions');
   const aplicar = nodo('button', 'panel-button primary', 'Guardar fecha');
   aplicar.type = 'submit';
-  const restaurar = boton('Usar el tiempo de la foto', 'panel-button', () => {
-    fijarObjetivo(Date.now() + segundosDeMuestra * 1000);
+  const restaurar = boton('Usar fecha de lanzamiento', 'panel-button', () => {
+    fijarObjetivo(fechaLanzamiento);
     actualizarTiempo();
     panel.close();
   });
