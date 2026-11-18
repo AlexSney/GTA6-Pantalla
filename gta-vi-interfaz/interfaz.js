@@ -162,7 +162,7 @@ function seleccionar(id, enfocar = false) {
   escena.classList.toggle('is-visible', !esViceCity);
 
   const acciones = { galeria: 'Abrir galería', capturas: 'Ver capturas', biblioteca: 'Ver biblioteca' };
-  const accion = acciones[id] || 'Ver juego';
+  const accion = acciones[id] || 'Jugar';
   $('#action-label').textContent = id === 'gta-vi' ? tiempoRestante(Date.now()) : accion;
   $('#primary').setAttribute('aria-label', id === 'gta-vi' ? 'Abrir cuenta regresiva de GTA VI' : accion + ' · ' + item.nombre);
   document.title = item.nombre + ' · Menú de consola';
