@@ -8,7 +8,11 @@
   <link rel="icon" href="assets/gta-vi-logo.svg" type="image/svg+xml">
   <link rel="preload" href="assets/vice-city.webp" as="image">
   <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="consola.css">
+  <link rel="stylesheet" href="ajustes.css">
   <script src="catalogo.js" defer></script>
+  <script src="consola.js" defer></script>
+  <script src="ajustes.js" defer></script>
   <script src="interfaz.js" defer></script>
 </head>
 <body>
@@ -18,15 +22,14 @@
       <div class="vice-art"></div>
       <div class="other-scene" id="other-scene">
         <div class="other-art" id="other-art"></div>
-        <span class="backdrop-brand" id="backdrop-brand"></span>
       </div>
       <div class="shading"></div>
     </div>
 
     <header class="topbar">
       <nav class="sections" aria-label="Secciones de la consola">
-        <button type="button" class="section-tab" data-section="games" aria-pressed="true" aria-label="Games, juegos" lang="en">Games</button>
-        <button type="button" class="section-tab" data-section="media" aria-pressed="false" aria-label="Media, multimedia" lang="en">Media</button>
+        <button type="button" class="section-tab" data-section="games" aria-pressed="true">Juegos</button>
+        <button type="button" class="section-tab" data-section="media" aria-pressed="false">Contenido multimedia</button>
       </nav>
       <div class="system-tools">
         <button type="button" class="system-button" id="search-button" aria-label="Buscar" title="Buscar (/)">
@@ -76,15 +79,21 @@
             <svg aria-hidden="true"><use href="#i-more"></use></svg>
           </button>
         </div>
-        <button type="button" class="friends-card" id="friends-card" aria-label="Amigos que juegan, 2 perfiles">
+        <button type="button" class="friends-card" id="friends-card" aria-label="Abrir Game Base">
           <span class="avatar-stack" aria-hidden="true">
             <span class="avatar avatar-astro"></span><span class="avatar avatar-ratchet"></span>
           </span>
-          <span class="friends-label">Amigos que juegan</span>
+          <span class="friends-label">Game Base</span>
           <svg class="friends-arrow" aria-hidden="true"><use href="#i-right"></use></svg>
         </button>
       </section>
     </main>
+    <footer class="console-footer">
+      <button type="button" id="control-center-button" class="ps-button" aria-label="Abrir centro de control (P)">
+        <svg aria-hidden="true"><use href="#i-controller"></use></svg><span>Centro de control</span><kbd>P</kbd>
+      </button>
+      <span class="input-hints"><span>✕</span> Seleccionar <span>◯</span> Atrás</span>
+    </footer>
   </div>
 
   <dialog id="panel" class="panel" aria-labelledby="panel-title">
@@ -113,6 +122,24 @@
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v6l4 2"/></symbol>
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-9v.1"/></symbol>
     <symbol id="i-screen" viewBox="0 0 24 24"><path d="M3 9V3h6m6 0h6v6m0 6v6h-6m-6 0H3v-6"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H14v-6h-4v6H3z"/></symbol>
+    <symbol id="i-controller" viewBox="0 0 24 24"><path d="M7 7h10c3 0 5 11 3 12-2 1-4-3-5-3H9c-1 0-3 4-5 3C2 18 4 7 7 7Z"/><path d="M8 10v5m-2.5-2.5h5"/><circle cx="16" cy="11" r=".7"/><circle cx="18" cy="14" r=".7"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M5 17h14l-2-3V9a5 5 0 0 0-10 0v5zM10 21h4"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 2v10M6.5 5.5a9 9 0 1 0 11 0"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21S2 15 2 8a5 5 0 0 1 10-1A5 5 0 0 1 22 8c0 7-10 13-10 13Z"/></symbol>
+    <symbol id="i-network" viewBox="0 0 24 24"><path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0m-11 4a6 6 0 0 1 8 0"/><circle cx="12" cy="20" r="1"/></symbol>
+    <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M3 9h4l6-5v16l-6-5H3Zm13-1a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-accessibility" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><path d="m3 8 9 2 9-2m-9 2v6m0-3-5 8m5-8 5 8"/></symbol>
+    <symbol id="i-capture" viewBox="0 0 24 24"><path d="M3 7h4l2-3h6l2 3h4v13H3z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15A9 9 0 0 1 9 4 9 9 0 1 0 20 15Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 3h10v7a5 5 0 0 1-10 0Zm0 2H3v3a4 4 0 0 0 4 4m10-7h4v3a4 4 0 0 1-4 4m-5 3v6m-5 0h10"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1Z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m6 3 15 9-15 9Z"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m13 4-8 8 8 8M5 12h16"/></symbol>
   </svg>
 </body>
 </html>

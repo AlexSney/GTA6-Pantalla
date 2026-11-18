@@ -9,7 +9,6 @@ const avatares = { lucia: 'Lucía', astro: 'Astro Bot', ratchet: 'Ratchet', cybe
 let seccion = 'games';
 let elegido = 'gta-vi';
 let focoAlCerrar;
-let indiceFoto = 0;
 
 // Algunos navegadores limitan localStorage cuando se abre un archivo con doble clic.
 // El estado en memoria mantiene operativo el menú en ese caso.
@@ -77,10 +76,9 @@ function portada(id) {
   el.style.setProperty('--cover-base', item.color);
   if (item.cover) {
     el.append(imagen(item.cover, 'cover-art'));
-  } else if (id === 'netflix') {
-    el.append(nodo('span', 'cover-lettering', 'NETFLIX'));
+
   } else {
-    el.append(icono(id === 'galeria' ? 'photo' : 'grid', 'cover-icon'));
+    el.append(icono(['galeria', 'capturas'].includes(id) ? 'photo' : 'grid', 'cover-icon'));
   }
   return el;
 }
@@ -160,12 +158,11 @@ function seleccionar(id, enfocar = false) {
     const fondo = item.fondo || item.cover || (id === 'biblioteca' ? catalogo['gta-v'].cover : '');
     escena.style.setProperty('--scene-color', item.color);
     $('#other-art').style.backgroundImage = fondo ? 'url("' + fondo + '")' : 'none';
-    $('#backdrop-brand').textContent = id === 'netflix' ? 'N' : '';
   }
   escena.classList.toggle('is-visible', !esViceCity);
 
-  const acciones = { netflix: 'Ver aplicación', galeria: 'Abrir galería', biblioteca: 'Ver biblioteca' };
-  const accion = acciones[id] || 'Ver ficha';
+  const acciones = { galeria: 'Abrir galería', capturas: 'Ver capturas', biblioteca: 'Ver biblioteca' };
+  const accion = acciones[id] || 'Ver juego';
   $('#action-label').textContent = id === 'gta-vi' ? tiempoRestante(Date.now()) : accion;
   $('#primary').setAttribute('aria-label', id === 'gta-vi' ? 'Abrir cuenta regresiva de GTA VI' : accion + ' · ' + item.nombre);
   document.title = item.nombre + ' · Menú de consola';
@@ -212,26 +209,7 @@ function filaMenu(texto, simbolo, accion) {
   return fila;
 }
 
-function ficha(id) {
-  const item = catalogo[id];
-  abrirPanel('ficha', item.nombre);
-  const cabecera = nodo('div', 'detail-top');
-  const meta = nodo('div');
-  meta.append(nodo('strong', '', item.genero), nodo('span', 'detail-meta', item.plataforma));
-  cabecera.append(portada(id), meta);
-  panelBody.append(cabecera, nodo('p', '', item.descripcion));
-  if (id === 'netflix') {
-    const enlace = nodo('a', 'panel-button primary', 'Ir a Netflix ↗');
-    enlace.href = 'https://www.netflix.com/';
-    enlace.target = '_blank';
-    enlace.rel = 'noopener noreferrer';
-    panelBody.append(enlace);
-  } else if (id === 'gta-vi') {
-    panelBody.append(boton('Cuenta regresiva', 'panel-button primary', abrirContador));
-  } else if (id === 'galeria' || id === 'biblioteca') {
-    panelBody.append(boton('Abrir', 'panel-button primary', id === 'galeria' ? abrirGaleria : abrirBiblioteca));
-  }
-}
+function ficha(id) { mostrarJuego(id); }
 
 function fechaLocal(fecha) {
   const d = new Date(fecha);
@@ -281,70 +259,11 @@ function abrirContador() {
   panelBody.append(form);
 }
 
-function abrirBiblioteca() {
-  abrirPanel('biblioteca', 'Biblioteca de juegos');
-  const grid = nodo('div', 'collection-grid');
-  for (const [id, item] of Object.entries(catalogo)) {
-    if (!item.cover) continue;
-    const elegir = boton('', 'grid-item', () => seleccionarDesdePanel(id));
-    elegir.append(portada(id), nodo('span', 'grid-name', item.nombre));
-    grid.append(elegir);
-  }
-  panelBody.append(grid);
-}
+function abrirBiblioteca() { mostrarBiblioteca(); }
 
-function abrirBusqueda() {
-  abrirPanel('buscar', 'Buscar');
-  const entrada = nodo('input', 'text-input');
-  entrada.type = 'search';
-  entrada.placeholder = 'Busca un juego o una aplicación';
-  entrada.setAttribute('aria-label', entrada.placeholder);
-  const resultados = nodo('div', 'results');
-  const normalizar = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  function filtrar() {
-    const q = normalizar(entrada.value.trim());
-    resultados.replaceChildren();
-    for (const [id, item] of Object.entries(catalogo)) {
-      const terminos = [item.nombre, id.replaceAll('-', ' '), item.plataforma, ...(item.alias || [])];
-      const texto = normalizar(terminos.join(' '));
-      if (id === 'biblioteca' || !texto.includes(q)) continue;
-      const fila = boton('', 'result-row', () => seleccionarDesdePanel(id));
-      const nombre = nodo('span', '', item.nombre);
-      nombre.append(nodo('small', '', item.genero));
-      fila.append(portada(id), nombre, icono('right', 'row-next'));
-      resultados.append(fila);
-    }
-    if (!resultados.children.length) resultados.append(nodo('p', 'empty', 'No se encontraron resultados.'));
-  }
-  entrada.addEventListener('input', filtrar);
-  entrada.addEventListener('keydown', event => {
-    if (event.key === 'Enter') resultados.querySelector('button')?.click();
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      resultados.querySelector('button')?.focus();
-    }
-  });
-  panelBody.append(entrada, resultados);
-  filtrar();
-  entrada.focus();
-}
+function abrirBusqueda() { mostrarBusqueda(); }
 
-function abrirAmigos() {
-  abrirPanel('amigos', 'Amigos que juegan');
-  panelBody.append(nodo('p', '', 'Perfiles de muestra de esta consola.'));
-  const lista = nodo('div', 'people-list');
-  for (const [avatar, nombre, estado] of [
-    ['astro', 'Luna_VC', 'En línea · En el menú de juegos'],
-    ['ratchet', 'Rafa_Arcade', 'En línea · En la biblioteca']
-  ]) {
-    const persona = nodo('div', 'person');
-    const datos = nodo('div');
-    datos.append(nodo('strong', '', nombre), nodo('small', '', estado));
-    persona.append(nodo('span', 'avatar avatar-' + avatar), datos);
-    lista.append(persona);
-  }
-  panelBody.append(lista);
-}
+function abrirAmigos() { mostrarGameBase(); }
 
 function aplicarAvatar() {
   $('#profile-avatar').className = 'avatar avatar-' + avatarActual;
@@ -355,66 +274,11 @@ function aplicarAvatar() {
   });
 }
 
-function abrirPerfil() {
-  abrirPanel('perfil', 'Perfil');
-  const cabecera = nodo('div', 'profile-summary');
-  const cara = nodo('span', 'avatar');
-  cara.id = 'current-avatar';
-  const nombre = nodo('div', '', 'Jugador local');
-  nombre.append(nodo('small', 'profile-status', 'En línea · Perfil de muestra'));
-  cabecera.append(cara, nombre);
-  const opciones = nodo('div', 'avatar-options');
-  for (const [clave, titulo] of Object.entries(avatares)) {
-    const opcion = boton('', 'avatar-choice', () => {
-      avatarActual = clave;
-      guardar('avatar', clave);
-      aplicarAvatar();
-    });
-    opcion.dataset.avatar = clave;
-    opcion.setAttribute('aria-label', titulo);
-    opcion.title = titulo;
-    opcion.append(nodo('span', 'avatar avatar-' + clave));
-    opciones.append(opcion);
-  }
-  panelBody.append(cabecera, nodo('span', 'field-label', 'Elige tu avatar'), opciones);
-  aplicarAvatar();
-}
+function abrirPerfil() { mostrarPerfil(); }
 
-function abrirGaleria() {
-  abrirPanel('galeria', 'Galería multimedia');
-  indiceFoto = 0;
-  const figura = nodo('figure', 'gallery-figure');
-  const foto = nodo('img', 'gallery-image');
-  foto.id = 'gallery-image';
-  const pie = nodo('figcaption', 'gallery-footer');
-  const titulo = nodo('div', 'gallery-caption');
-  titulo.setAttribute('aria-live', 'polite');
-  const nombre = nodo('strong');
-  nombre.id = 'gallery-name';
-  const numero = nodo('small');
-  numero.id = 'gallery-index';
-  titulo.append(nombre, numero);
-  const flechas = nodo('div', 'gallery-controls');
-  for (const [paso, direccion, etiqueta] of [[-1, 'left', 'Imagen anterior'], [1, 'right', 'Imagen siguiente']]) {
-    const b = boton('', '', () => cambiarFoto(paso));
-    b.setAttribute('aria-label', etiqueta);
-    b.append(icono(direccion));
-    flechas.append(b);
-  }
-  pie.append(titulo, flechas);
-  figura.append(foto, pie);
-  panelBody.append(figura);
-  cambiarFoto(0);
-}
+function abrirGaleria() { mostrarGaleria(); }
 
-function cambiarFoto(paso) {
-  indiceFoto = (indiceFoto + paso + galeria.length) % galeria.length;
-  const item = galeria[indiceFoto];
-  $('#gallery-image').src = item.imagen;
-  $('#gallery-image').alt = item.alt;
-  $('#gallery-name').textContent = item.titulo;
-  $('#gallery-index').textContent = (indiceFoto + 1) + ' de ' + galeria.length;
-}
+function cambiarFoto(paso) { actualizarGaleria(paso); }
 
 function etiquetaPantalla() {
   return document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa';
@@ -434,55 +298,14 @@ async function pantallaCompleta() {
   }
 }
 
-function abrirAjustes() {
-  abrirPanel('ajustes', 'Ajustes');
-  const formato = nodo('label', 'setting-row', 'Formato del reloj');
-  const select = nodo('select', 'select-input');
-  select.setAttribute('aria-label', 'Formato del reloj');
-  for (const valor of ['24', '12']) {
-    const opcion = nodo('option', '', valor + ' horas');
-    opcion.value = valor;
-    select.append(opcion);
-  }
-  select.value = doceHoras ? '12' : '24';
-  select.addEventListener('change', () => {
-    doceHoras = select.value === '12';
-    guardar('hora', select.value);
-    actualizarTiempo();
-  });
-  formato.append(select);
-  const movimiento = nodo('label', 'setting-row', 'Reducir animaciones');
-  const casilla = nodo('input');
-  casilla.type = 'checkbox';
-  casilla.checked = reducido || matchMedia('(prefers-reduced-motion: reduce)').matches;
-  casilla.disabled = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  casilla.addEventListener('change', () => {
-    reducido = casilla.checked;
-    guardar('movimiento', reducido ? 'reducido' : 'normal');
-    document.documentElement.classList.toggle('reduce-motion', reducido);
-  });
-  movimiento.append(casilla);
-  panelBody.append(formato, movimiento);
-  if (document.fullscreenEnabled) panelBody.append(filaMenu(etiquetaPantalla(), 'screen', pantallaCompleta));
-  const ayuda = nodo('div', 'controls-note');
-  ayuda.innerHTML = '<kbd>←</kbd> <kbd>→</kbd> Cambiar de título &nbsp; <kbd>Enter</kbd> Abrir &nbsp; <kbd>Esc</kbd> Cerrar';
-  panelBody.append(ayuda);
-}
 
-function masOpciones() {
-  abrirPanel('opciones', 'Más opciones');
-  const lista = nodo('div', 'menu-list');
-  lista.append(filaMenu('Ver información', 'info', () => ficha(elegido)));
-  if (elegido === 'gta-vi') lista.append(filaMenu('Cambiar cuenta regresiva', 'clock', abrirContador));
-  lista.append(filaMenu('Biblioteca de juegos', 'grid', abrirBiblioteca));
-  if (document.fullscreenEnabled) lista.append(filaMenu(etiquetaPantalla(), 'screen', pantallaCompleta));
-  panelBody.append(lista);
-}
+function masOpciones() { mostrarOpcionesJuego(); }
 
 function accionPrincipal() {
   if (elegido === 'gta-vi') abrirContador();
   else if (elegido === 'galeria') abrirGaleria();
   else if (elegido === 'biblioteca') abrirBiblioteca();
+  else if (elegido === 'capturas') abrirCapturas();
   else ficha(elegido);
 }
 
@@ -495,7 +318,7 @@ $('#primary').addEventListener('click', accionPrincipal);
 $('#more').addEventListener('click', masOpciones);
 $('#friends-card').addEventListener('click', abrirAmigos);
 $('#search-button').addEventListener('click', abrirBusqueda);
-$('#settings-button').addEventListener('click', abrirAjustes);
+$('#settings-button').addEventListener('click', () => abrirAjustes());
 $('#profile-button').addEventListener('click', abrirPerfil);
 $('#close-panel').addEventListener('click', () => panel.close());
 panel.addEventListener('click', event => {
@@ -506,15 +329,18 @@ panel.addEventListener('click', event => {
 panel.addEventListener('close', () => {
   if (panel.open) return;
   panelBody.replaceChildren();
+  if ($('#rest-screen')) { $('#rest-screen button').focus(); return; }
   if (focoAlCerrar?.isConnected && focoAlCerrar !== document.body) focoAlCerrar.focus({ preventScroll: true });
   else rail.querySelector('.is-selected')?.focus({ preventScroll: true });
 });
 
 document.addEventListener('keydown', event => {
   if (event.altKey || event.ctrlKey || event.metaKey) return;
+  if ($('#rest-screen')) return;
   const tecla = event.key;
   const horizontal = tecla === 'ArrowLeft' || tecla === 'ArrowRight';
   const paso = tecla === 'ArrowLeft' ? -1 : 1;
+  if (event.defaultPrevented) return;
   if (panel.open) {
     if (horizontal && panel.dataset.view === 'galeria') {
       event.preventDefault();
@@ -574,6 +400,8 @@ ventanaRail.addEventListener('click', event => {
   }
 }, true);
 
+inicializarConsola();
+inicializarAjustes();
 document.documentElement.classList.toggle('reduce-motion', reducido);
 aplicarAvatar();
 dibujarCarrusel();

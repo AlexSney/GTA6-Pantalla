@@ -23,9 +23,11 @@ const catalogo = {
     cover: 'assets/red-dead.webp', fondo: 'assets/fondo-red-dead.webp', color: '#522623',
     descripcion: 'Cabalga con Arthur Morgan y la banda de Van der Linde por un Oeste que cambia a su alrededor.'
   },
-  'netflix': {
-    nombre: 'Netflix', plataforma: 'App', genero: 'Cine y series', color: '#440d1c',
-    descripcion: 'Abre Netflix en tu navegador para explorar su catálogo de películas y series.'
+  'nier-automata': {
+    nombre: 'NieR:Automata', plataforma: 'PS4', genero: 'Rol y acción',
+    alias: ['Nier Automata', 'NieR', '2B', 'YoRHa'],
+    cover: 'assets/nier-automata.png', fondo: 'assets/fondo-nier-automata.jpg', color: '#58584b',
+    descripcion: 'Acompaña a 2B y 9S en una Tierra ocupada por máquinas. Descubre qué queda de la humanidad en una historia de acción, memoria e identidad.'
   },
   'elden-ring': {
     nombre: 'Elden Ring', plataforma: 'PS5', genero: 'Rol y aventura',
@@ -51,6 +53,10 @@ const catalogo = {
     nombre: 'Galería multimedia', plataforma: 'App', genero: 'Arte de los juegos', color: '#53355e',
     descripcion: 'Vuelve al atardecer de Vice City y recorre las ilustraciones de tu colección.'
   },
+  'capturas': {
+    nombre: 'Capturas', plataforma: 'App', genero: 'Galería multimedia', color: '#364456',
+    descripcion: 'Vuelve a las imágenes que has guardado de la galería y descárgalas a tu dispositivo.'
+  },
   'biblioteca': {
     nombre: 'Biblioteca de juegos', plataforma: 'Colección', genero: 'Tu colección', color: '#273a54',
     descripcion: 'Explora tu colección y elige qué juego quieres ver en el menú de inicio.'
@@ -58,15 +64,16 @@ const catalogo = {
 };
 
 const secciones = {
-  games: ['cyberpunk', 'gta-v', 'gta-vi', 'red-dead', 'netflix', 'elden-ring', 'astro-bot', 'ratchet', 'tsushima', 'galeria', 'biblioteca'],
-  media: ['galeria', 'netflix']
+  games: ['cyberpunk', 'gta-v', 'gta-vi', 'red-dead', 'nier-automata', 'elden-ring', 'astro-bot', 'ratchet', 'tsushima', 'galeria', 'biblioteca'],
+  media: ['galeria', 'capturas']
 };
 
 const galeria = [
   { titulo: 'Atardecer en Vice City', imagen: 'assets/vice-city.webp', alt: 'Lucía y Jason frente a la bahía de Vice City al atardecer.' },
   { titulo: 'Postales de Leonida', imagen: 'assets/gta-vi.webp', alt: 'Collage ilustrado de los personajes y vehículos de Leonida.' },
   { titulo: 'Los Santos', imagen: 'assets/gta-v.webp', alt: 'Los protagonistas de Los Santos entre coches y helicópteros.' },
-  { titulo: 'Un salto galáctico', imagen: 'assets/astro-bot.webp', alt: 'Astro Bot salta en un cielo azul brillante.' }
+  { titulo: 'Un salto galáctico', imagen: 'assets/astro-bot.webp', alt: 'Astro Bot salta en un cielo azul brillante.' },
+  { titulo: 'NieR:Automata · YoRHa', imagen: 'assets/fondo-nier-automata.jpg', alt: '2B empuña una espada entre las ruinas cubiertas de vegetación.' }
 ];
 
 // 19 de noviembre de 2026 a las 00:00 locales. La hora se puede ajustar desde el menú.

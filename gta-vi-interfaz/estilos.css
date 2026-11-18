@@ -57,11 +57,6 @@ button svg, .disc-icon, .row-icon {
   background-size: cover; background-position: center 37%;
   mask-image: linear-gradient(90deg, transparent 0%, #000 31%);
 }
-.backdrop-brand {
-  position: absolute; right: 14%; top: 50%; transform: translateY(-50%);
-  font: 900 clamp(11rem, 28vw, 39rem)/1 Impact, "Arial Black", sans-serif;
-  color: #d90c29; text-shadow: 12px 16px 45px #13071199;
-}
 
 /* Las miniaturas se mueven hasta la misma posición que la portada seleccionada en la foto. */
 .topbar {
@@ -128,8 +123,6 @@ button svg, .disc-icon, .row-icon {
   color: #fff; container-type: inline-size; user-select: none;
 }
 .cover > img.cover-art { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-.cover-netflix { background: radial-gradient(ellipse at 58% 95%, #4d111b, #1c121a 52%, #141318); }
-.cover-netflix .cover-lettering { position: absolute; inset: 0; display: grid; place-items: center; color: #ff263d; font: 900 20cqw/1 Impact, "Arial Narrow", system-ui, sans-serif; letter-spacing: -.09em; transform: scaleX(.83) scaleY(1.22); }
 .cover-galeria { background: #59395c url("assets/vice-city.webp") 20% 70% / 205%; }
 .cover-galeria::after { content: ""; position: absolute; inset: 0; background: #251b445c; z-index: -1; }
 .cover-biblioteca { background: linear-gradient(135deg, #575766, #2e3042 65%, #242638); }
